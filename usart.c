@@ -1,31 +1,33 @@
+//https://cloud.tencent.com/developer/article/1563163
+
 #include <reg52.h>
 #include<intrins.h>
 #include"usart.h"
- //´®¿Ú1µÄ²¨ÌØÂÊ=¶¨Ê±Æ÷2µÄÒç³öÂÊ/4 
- //¶¨Ê±Æ÷2µÄÒç³öÂÊ=sysclk/12/(65536-[T2H,T2L]) //12TÄ£Ê½ÏÂ
- //ËùÒÔ£¬´®¿Ú1µÄ²¨ÌØÂÊ=sysclk/12/4/(65536-[T2H,T2L])
+ //ä¸²å£1çš„æ³¢ç‰¹çŽ‡=å®šæ—¶å™¨2çš„æº¢å‡ºçŽ‡/4 
+ //å®šæ—¶å™¨2çš„æº¢å‡ºçŽ‡=sysclk/12/(65536-[T2H,T2L]) //12Tæ¨¡å¼ä¸‹
+ //æ‰€ä»¥ï¼Œä¸²å£1çš„æ³¢ç‰¹çŽ‡=sysclk/12/4/(65536-[T2H,T2L])
 void Uart_Init(void)
 {
-	TMOD=0x20;	  //¶¨Ê±Æ÷¹¤×÷·½Ê½£¬Ñ¡ÔñÁË¶¨Ê±Æ÷1£¬¹¤×÷·½Ê½2 °ËÎ»³õÖµ×Ô¶¯ÖØ×°µÄ8Î»¶¨Ê±Æ÷¡£		 
-	TH1=0xfd;	  //¶¨Ê±Æ÷1³õÖµ	,ÉèÖÃ²¨ÌØÂÊÎª9600 ¾§Õñ11.0529MHZ?
+	TMOD=0x20;	  //å®šæ—¶å™¨å·¥ä½œæ–¹å¼ï¼Œé€‰æ‹©äº†å®šæ—¶å™¨1ï¼Œå·¥ä½œæ–¹å¼2 å…«ä½åˆå€¼è‡ªåŠ¨é‡è£…çš„8ä½å®šæ—¶å™¨ã€‚		 
+	TH1=0xfd;	  //å®šæ—¶å™¨1åˆå€¼	,è®¾ç½®æ³¢ç‰¹çŽ‡ä¸º9600 æ™¶æŒ¯11.0529MHZ?
 	TL1=0xfd;
-	TR1=1;		  //¿ªÆô¶¨Ê±Æ÷1
+	TR1=1;		  //å¼€å¯å®šæ—¶å™¨1
  
 	SM0=0;
-	SM1=1;		  //10Î»Òì²½½ÓÊÕ£¬£¨8Î»Êý¾Ý£©²¨ÌØÂÊ¿É±ä
-    REN=1;		  //ÔÊÐí´®ÐÐ¿Ú½ÓÊÕÎ»
-	EA=1;	      //ÔÊÐíÖÐ¶Ï£¨×ÜÕ¢£©
-	ES=1;		  //ÔÊÐí´®¿ÚÖÐ¶Ï
+	SM1=1;		  //10ä½å¼‚æ­¥æŽ¥æ”¶ï¼Œï¼ˆ8ä½æ•°æ®ï¼‰æ³¢ç‰¹çŽ‡å¯å˜
+    REN=1;		  //å…è®¸ä¸²è¡Œå£æŽ¥æ”¶ä½
+	EA=1;	      //å…è®¸ä¸­æ–­ï¼ˆæ€»é—¸ï¼‰
+	ES=1;		  //å…è®¸ä¸²å£ä¸­æ–­
 }
 
 void Sendc(unsigned char * pd)
 {
-	 while((*pd)!='\0') //×Ö·û'\0' : ASCIIÂëÎª0£¬±íÊ¾Ò»¸ö×Ö·û´®½áÊøµÄ±êÖ¾¡£ÕâÊÇ×ªÒå×Ö·û¡£
+	 while((*pd)!='\0') //å­—ç¬¦'\0' : ASCIIç ä¸º0ï¼Œè¡¨ç¤ºä¸€ä¸ªå­—ç¬¦ä¸²ç»“æŸçš„æ ‡å¿—ã€‚è¿™æ˜¯è½¬ä¹‰å­—ç¬¦ã€‚
 	 {
-	  SBUF=*pd; //·¢ËÍÒ»¸ö×Ö·û
+	  SBUF=*pd; //å‘é€ä¸€ä¸ªå­—ç¬¦
 	  while(!TI);
 		TI=0;
-	  pd++;  //ÒÆ¶¯µ½ÏÂÒ»¸ö×Ö·û
+	  pd++;  //ç§»åŠ¨åˆ°ä¸‹ä¸€ä¸ªå­—ç¬¦
 	 }
 }
 
